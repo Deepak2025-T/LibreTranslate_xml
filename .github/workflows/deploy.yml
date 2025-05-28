@@ -1,9 +1,9 @@
 name: Deploy FastAPI App
 
-on:
+on:  # ✅ This is your trigger
   push:
     branches:
-      - main
+      - main  # ✅ Trigger workflow only when pushing to main branch
 
 jobs:
   deploy:
@@ -36,5 +36,6 @@ jobs:
             pip install -r requirements.txt
             pkill -f "uvicorn main:app" || true
             nohup venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 &
+
 
 
