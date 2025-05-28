@@ -1,4 +1,4 @@
-name: 🚀 Deploy FastAPI App to VPS
+name: 🚀 Auto Deploy FastAPI to Production Server
 
 on:
   push:
@@ -48,6 +48,7 @@ jobs:
             sleep 2
             nohup uvicorn main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
           "
+
 
 
 
