@@ -14,6 +14,9 @@ jobs:
       - name: 📦 Checkout code
         uses: actions/checkout@v3
 
+      - name: 🔍 Check repo files after checkout
+        run: ls -l
+
       - name: 🔐 Set up SSH key
         shell: bash
         run: |
@@ -43,6 +46,7 @@ jobs:
             sleep 2
             nohup uvicorn main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
           "
+
 
 
 
