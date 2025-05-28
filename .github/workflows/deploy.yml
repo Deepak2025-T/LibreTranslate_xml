@@ -1,4 +1,4 @@
-name: Deploy FastAPI App
+name: 🚀 Deploy FastAPI App to VPS
 
 on:
   push:
@@ -11,21 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📦 Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH key
+      - name: 🔐 Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Copy files to server
+      - name: 📁 Copy app files to server
         run: |
           scp -o StrictHostKeyChecking=no -r ./app ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/app
 
-      - name: Install dependencies and restart app
+      - name: 🔧 Install dependencies and restart FastAPI app
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
             cd /home/${{ secrets.SERVER_USER }}/app &&
@@ -34,6 +34,7 @@ jobs:
             pkill -f uvicorn || true &&
             nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
           "
+
 
 
 
