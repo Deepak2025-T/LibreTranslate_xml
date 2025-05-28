@@ -19,7 +19,10 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+        shell: bash
 
       - name: 📁 Copy app files to server
         run: |
@@ -28,12 +31,16 @@ jobs:
       - name: 🔧 Install dependencies and restart FastAPI app
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
-            cd /home/${{ secrets.SERVER_USER }}/app &&
-            source venv/bin/activate &&
-            pip install -r requirements.txt &&
-            pkill -f uvicorn || true &&
-            nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
+            set -e
+            cd /home/${{ secrets.SERVER_USER }}/app
+            source venv/bin/activate
+            pip install -r requirements.txt
+            pkill -f uvicorn || true
+            sleep 2
+            nohup uvicorn main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
           "
+        shell: bash
+
 
 
 
