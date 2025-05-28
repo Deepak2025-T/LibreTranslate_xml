@@ -32,7 +32,8 @@ jobs:
       - name: 📁 Copy app files to server
         shell: bash
         run: |
-          scp -o StrictHostKeyChecking=no -r ./app ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/app
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "mkdir -p /home/${{ secrets.SERVER_USER }}/app"
+          scp -o StrictHostKeyChecking=no -r ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/app
 
       - name: 🔧 Install dependencies and restart FastAPI app
         shell: bash
@@ -40,13 +41,13 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
             set -e
             cd /home/${{ secrets.SERVER_USER }}/app
+            python3 -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt
             pkill -f uvicorn || true
             sleep 2
             nohup uvicorn main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
           "
-
 
 
 
