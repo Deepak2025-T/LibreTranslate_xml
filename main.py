@@ -230,7 +230,7 @@ if __name__ == "__main__":
 # from fastapi.staticfiles import StaticFiles
 # from fastapi.templating import Jinja2Templates
 # import xml.etree.ElementTree as ET
-# from deep_translator import GoogleTranslator
+# from deep_translator import GoogleTranslator 
 # import os
 # import tempfile
 # import uvicorn

@@ -124,7 +124,7 @@
 
 
 
- <!DOCTYPE html>
+ <!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Universal XML Translator</title>
@@ -132,6 +132,17 @@
 </head>
 <body>
     <div class="container">
+
+        Login/Logout Bar
+        <div style="text-align:right; margin-bottom:10px;">
+            {% if user %}
+                Welcome, <b>{{ user }}</b> |
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+            {% endif %}
+        </div>
+
         <h1>Universal XML File Translator</h1>
 
         <p style="color:#555; margin-bottom:20px;">
@@ -182,5 +193,43 @@
             {% endfor %}
         </div>
     </div>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XML Translator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Translate XML Labels</h1>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form action="/translate" method="post" enctype="multipart/form-data">
+        <label for="file">Upload XML File:</label>
+        <input type="file" name="file" required><br>
+
+        <label for="source_lang">Source Language:</label>
+        <select name="source_lang">
+            {% for code, name in languages %}
+                <option value="{{ code }}">{{ name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="target_lang">Target Language:</label>
+        <select name="target_lang">
+            {% for code, name in languages %}
+                <option value="{{ code }}">{{ name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="custom_filename">Custom Output Name (optional):</label>
+        <input type="text" name="custom_filename" placeholder="e.g. translated_file"><br>
+
+        <button type="submit">Translate</button>
+    </form>
 </body>
 </html>
